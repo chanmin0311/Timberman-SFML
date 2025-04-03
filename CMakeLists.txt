@@ -2,23 +2,33 @@ cmake_minimum_required(VERSION 3.10)
 project(Timber)
 
 set(CMAKE_CXX_STANDARD 17)
+
+# set the SFML library path
 set(SFML_DIR "~/")
-# 소스 디렉토리 설정
+
+# Define source and include directories
 set(SRC_DIR src)
+set(INCLUDE_DIR include)
 
-# 소스 파일 목록
-file(GLOB SOURCES "${SRC_DIR}/*.cpp")
+# Include all source files (.cpp, .cc)
+file(GLOB SOURCES 
+    "${SRC_DIR}/*.cpp"
+    "${SRC_DIR}/*.cc"
+)
 
-# SMFL 라이브러리 설정
+# Add include directory (for header file lookup)
+include_directories(${INCLUDE_DIR})
+
+# Find SFML libraries
 find_package(SFML 2.5 COMPONENTS system window graphics REQUIRED)
 
-# 실행 파일 생성
+# Create the executable
 add_executable(${PROJECT_NAME} ${SOURCES})
 
-# SFML 라이브러리 링크
+# Link SFML libraires
 target_link_libraries(${PROJECT_NAME} sfml-system sfml-window sfml-graphics)
 
-# 빌드 출력 디렉토리 설정 (프로젝트 루트의 bin 폴더에 생성)
+# Set output directry for the built executable (bin folder)
 set_target_properties(${PROJECT_NAME} PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin
 )
