@@ -2,23 +2,31 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
+#pragma once
 #include <SFML/Graphics.hpp>
-
+#include <vector>
+#include <memory>
 #include "Entity.hpp"
+#include "Bee.hpp"
+#include "Cloud.hpp"
 
 class Game {
-   public:
+    public:
     Game();
     void run();
 
-   private:
-    sf::RenderWindow window;
-    Entity background;
-    Entity tree;
-    Entity cloud1;
-    Entity cloud2;
-    Entity cloud3;
-    Entity bee;
+    private:
+    void processInput();
+    void update(sf::Time dt);
+    void render();
+
+    sf::RenderWindow mWindow;
+    sf::Texture mTextureBackground;
+    sf::Sprite mSpriteBackground;
+    sf::Texture mTextureTree;
+    sf::Sprite mSpriteTree;
+    sf::Clock mClock;
+    std::vector<std::unique_ptr<Entity>> mEntities;
 };
 
 #endif  // GAME_HPP
