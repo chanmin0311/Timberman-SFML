@@ -39,9 +39,6 @@ class Game {
     // This vector will hold all the entities in the game
     std::vector<std::unique_ptr<Entity>> mEntities;
 
-    // Game state variables
-    bool mPaused;
-
     // HUD object
     Hud mHud;
 };

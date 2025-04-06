@@ -14,16 +14,40 @@ class Hud {
     sf::Text& getMessage();
     sf::Text& getScoreText();
     int getScore();
+    float getTimeRemaining();
+    bool getPaused();
+
+    // Setters
+    void setMessageText(const std::string& msg);
+    void setScoreText(const std::string& score);
+    void setScore(int score);
+    void setTimeRemaining(float time);
+    void setPaused(bool paused);
 
     // Render functions
-    void renderMessage(sf::RenderWindow& window);
-    void renderScore(sf::RenderWindow& window);
+    void renderMessageText(sf::RenderWindow& window);
+    void renderScoreText(sf::RenderWindow& window);
+    void renderTimeBar(sf::RenderWindow& window);
+
+    // Update function
+    void updateTimeBar(sf::Time dt);
 
    private:
+    // Font object
     sf::Font mFont;
-    sf::Text mMessage;
+
+    // Text objects
+    sf::Text mMessageText;
     sf::Text mScoreText;
     int mScore;
+
+    // Time bar
+    sf::Time mGameTimeTotal;
+    sf::RectangleShape mTimeBar;
+    float mTimeRemaining;
+    float mTimeBarWidthPerSecond;
+
+    bool mPaused;
 };
 
 #endif  // HUD_HPP

@@ -3,7 +3,6 @@
 
 Game::Game()
     : mWindow(sf::VideoMode(1920, 1080), "Timber!!!", sf::Style::Fullscreen),
-      mPaused(true),
       mHud()
       {
     // Find the background texture and load it
@@ -46,15 +45,18 @@ void Game::processInput() {
     }
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
-        mPaused = false;
+        mHud.setPaused(false);
+        mHud.setScore(0);
+        mHud.setTimeRemaining(6.0f);
     }
 }
 
 void Game::update(sf::Time dt) {
-    if (mPaused == false) {
+    if (mHud.getPaused() == false) {
         for (auto& entity : mEntities) {
             entity->update(dt);
         }
+        mHud.updateTimeBar(dt);
     }
 }
 
@@ -67,10 +69,11 @@ void Game::render() {
     mWindow.draw(mSpriteTree);
     // Draw the score
     mHud.getScoreText().setString("Score: " + std::to_string(mHud.getScore()));
-    mHud.renderScore(mWindow);
+    mHud.renderScoreText(mWindow);
     // // Draw the message
-    if (mPaused) {
-        mHud.renderMessage(mWindow);
+    if (mHud.getPaused()) {
+        mHud.renderMessageText(mWindow);
     }
+    mHud.renderTimeBar(mWindow);
     mWindow.display();
 }
