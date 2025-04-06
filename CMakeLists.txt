@@ -11,7 +11,7 @@ set(SRC_DIR src)
 set(INCLUDE_DIR include)
 
 # Include all source files (.cpp, .cc)
-file(GLOB SOURCES 
+file(GLOB SOURCES CMAKE_CONFIGURE_DEPENDS
     "${SRC_DIR}/*.cpp"
     "${SRC_DIR}/*.cc"
 )
