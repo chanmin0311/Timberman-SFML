@@ -25,18 +25,15 @@ class Game {
     // Variables to be rendered in the window
     sf::RenderWindow mWindow;
 
+    // Background and tree textures and sprites
     sf::Texture mTextureBackground;
     sf::Sprite mSpriteBackground;
 
+    // Tree texture and sprite
     sf::Texture mTextureTree;
     sf::Sprite mSpriteTree;
 
     sf::Clock mClock;
-
-    sf::Font mFont;
-    sf::Text mMessage;
-    sf::Text mScoreText;
-    int mScore;
 
     // Entity vector
     // This vector will hold all the entities in the game
@@ -44,6 +41,9 @@ class Game {
 
     // Game state variables
     bool mPaused;
+
+    // HUD object
+    Hud mHud;
 };
 
 #endif  // GAME_HPP

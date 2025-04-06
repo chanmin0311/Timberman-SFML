@@ -4,35 +4,8 @@
 Game::Game()
     : mWindow(sf::VideoMode(1920, 1080), "Timber!!!", sf::Style::Fullscreen),
       mPaused(true),
-      mScore(0) {
-    // Find the font and load it
-    if (!mFont.loadFromFile("../assets/fonts/KOMIKAP_.ttf")) {
-        throw std::runtime_error("Failed to load font");
-    }
-    // Set up HUD (Heads Up Display)
-    // Set the font to our test
-    mMessage.setFont(mFont);
-    mScoreText.setFont(mFont);
-    // Assigin the actual text
-    mMessage.setString("Press Enter to start!");
-    mScoreText.setString("Score: 0");
-    // Set the size of the text
-    mMessage.setCharacterSize(75);
-    mScoreText.setCharacterSize(75);
-    // Set the color of the text
-    mMessage.setFillColor(sf::Color::White);
-    mScoreText.setFillColor(sf::Color::White);
-    // Position the text
-    // Get the bounding box of the text
-    sf::FloatRect textRect = mMessage.getLocalBounds();
-    // Set the origin of the text to the center
-    mMessage.setOrigin(textRect.left + textRect.width / 2.0f,
-                       textRect.top + textRect.height / 2.0f);
-    // Set the position of the text to the center of the screen
-    mMessage.setPosition(mWindow.getSize().x / 2.0f, mWindow.getSize().y / 2.0f);
-    // Set the position of the score text to the top left corner
-    mScoreText.setPosition(20, 20);
-
+      mHud()
+      {
     // Find the background texture and load it
     // Set the background texture
     if (!mTextureBackground.loadFromFile("../assets/images/background.png")) {
@@ -93,11 +66,11 @@ void Game::render() {
     }
     mWindow.draw(mSpriteTree);
     // Draw the score
-    mScoreText.setString("Score: " + std::to_string(mScore));
-    mWindow.draw(mScoreText);
-    // Draw the message
+    mHud.getScoreText().setString("Score: " + std::to_string(mHud.getScore()));
+    mHud.renderScore(mWindow);
+    // // Draw the message
     if (mPaused) {
-        mWindow.draw(mMessage);
+        mHud.renderMessage(mWindow);
     }
     mWindow.display();
 }
