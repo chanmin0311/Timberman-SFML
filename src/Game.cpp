@@ -18,7 +18,7 @@ Game::Game()
     mScoreText.setString("Score: 0");
     // Set the size of the text
     mMessage.setCharacterSize(75);
-    mScoreText.setCharacterSize(100);
+    mScoreText.setCharacterSize(75);
     // Set the color of the text
     mMessage.setFillColor(sf::Color::White);
     mScoreText.setFillColor(sf::Color::White);

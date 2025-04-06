@@ -1,5 +1,7 @@
 // Cloud.hpp
 #pragma once
+#ifndef CLOUD_HPP
+#define CLOUD_HPP
 #include "../include/Entity.hpp"
 
 class Cloud : public Entity {
@@ -7,6 +9,7 @@ class Cloud : public Entity {
     Cloud(float baseY = 0);
     void update(sf::Time dt) override;
     void render(sf::RenderWindow& window) override;
+    int rand_int_uniform_dist(int min, int max) override;
 
    private:
     sf::Texture mTexture;
@@ -17,3 +20,5 @@ class Cloud : public Entity {
 
     void reset();
 };
+
+#endif  // CLOUD_HPP

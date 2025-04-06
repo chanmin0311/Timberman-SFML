@@ -1,8 +1,8 @@
 // Game.hpp
+#pragma once
 #ifndef GAME_HPP
 #define GAME_HPP
 
-#pragma once
 #include <SFML/Graphics.hpp>
 #include <memory>
 #include <vector>
@@ -10,6 +10,7 @@
 #include "Bee.hpp"
 #include "Cloud.hpp"
 #include "Entity.hpp"
+#include "Hud.hpp"
 
 class Game {
    public:

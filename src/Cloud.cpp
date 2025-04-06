@@ -10,17 +10,12 @@ Cloud::Cloud(float baseY) : mActive(false), mSpeed(0.0f), mBaseY(baseY) {
 }
 
 void Cloud::reset() {
-    // Create random_device to get seed value
-    std::random_device rd;
-    // Initialize our random number generator
-    std::mt19937 gen(rd());
-    // Define unifrom distributions
-    std::uniform_int_distribution<int> speed_dist(50, 200);
-    std::uniform_int_distribution<int> alt_dist(0, 150);
+    auto cloudSpeed = rand_int_uniform_dist(50, 200);
+    auto cloudAltitude = rand_int_uniform_dist(0, 150);
 
-    // Set cloud's attribures
-    mSpeed = speed_dist(gen);
-    float altitude = alt_dist(gen) - 150 + mBaseY;
+    // Set cloud's attributes
+    mSpeed = cloudSpeed;
+    float altitude = cloudAltitude - 150 + mBaseY;
     mSprite.setPosition(-200, altitude);
     mActive = true;
 }
@@ -36,4 +31,10 @@ void Cloud::update(sf::Time dt) {
 
 void Cloud::render(sf::RenderWindow& window) {
     if (mActive) window.draw(mSprite);
+}
+
+int Cloud::rand_int_uniform_dist(int min, int max) {
+    // Define uniform distributions
+    std::uniform_int_distribution<int> dist(min, max);
+    return dist(gen);
 }
