@@ -3,11 +3,16 @@
 
 Game::Game()
     : mWindow(sf::VideoMode(1920, 1080), "Timber!!!", sf::Style::Fullscreen),
-      mHud()
-      {
+      mHud(),
+      mBranch(),
+      mPlayer() {
+    // Background and tree path to read
+    std::string backgroundPath = "../assets/images/background.png";
+    std::string treePath = "../assets/images/tree.png";
+
     // Find the background texture and load it
     // Set the background texture
-    if (!mTextureBackground.loadFromFile("../assets/images/background.png")) {
+    if (!mTextureBackground.loadFromFile(backgroundPath)) {
         throw std::runtime_error("Failed to load background texture");
     }
     // Set the background sprite
@@ -15,7 +20,7 @@ Game::Game()
 
     // Find the tree texture and load it
     // Set the tree texture
-    if (!mTextureTree.loadFromFile("../assets/images/tree.png")) {
+    if (!mTextureTree.loadFromFile(treePath)) {
         throw std::runtime_error("Failed to load tree texture");
     }
     // Set the tree sprite
@@ -31,6 +36,11 @@ Game::Game()
 }
 
 void Game::run() {
+    mBranch.updateBranches(1);
+    mBranch.updateBranches(2);
+    mBranch.updateBranches(3);
+    mBranch.updateBranches(4);
+    mBranch.updateBranches(5);
     while (mWindow.isOpen()) {
         processInput();
         sf::Time dt = mClock.restart();
@@ -40,6 +50,19 @@ void Game::run() {
 }
 
 void Game::processInput() {
+    // Process events
+    // Event object
+    sf::Event event;
+
+    // Detect if the key is released
+    while (mWindow.pollEvent(event)) {
+        if (event.type == sf::Event::KeyReleased && !mHud.getPaused()) {
+            mPlayer.setAcceptInput(true);
+            mPlayer.getAxeSprite().setPosition(2000, mPlayer.getAxeSprite().getPosition().y);
+        }
+    }
+
+    // Empty event queue by using poolEvent or waitEvent
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
         mWindow.close();
     }
@@ -48,10 +71,33 @@ void Game::processInput() {
         mHud.setPaused(false);
         mHud.setScore(0);
         mHud.setTimeRemaining(6.0f);
+
+        // Make all the branches dissapear
+        for (int i = 0; i < NUM_BRANCHES; i++) {
+            mBranch.setBranchPosition(i, branchPosition::side::NONE);
+        }
+
+        mPlayer.getRipSprite().setPosition(675, 2000);
+        mPlayer.getPlayerSprite().setPosition(PLAYER_LEFT, PLAYERR_POSITION_Y);
+        mPlayer.setAcceptInput(true);
+    }
+    if (mPlayer.isAcceptInput()) {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+            mPlayer.setPlayerSide(playerPosition::side::RIGHT);
+            mPlayer.update(mHud, mBranch);
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+            mPlayer.setPlayerSide(playerPosition::side::LEFT);
+            mPlayer.update(mHud, mBranch);
+        }
     }
 }
 
 void Game::update(sf::Time dt) {
+    mBranch.update();
+    if (mPlayer.isLogActive()) {
+        mPlayer.updateLog(dt);
+    }
     if (mHud.getPaused() == false) {
         for (auto& entity : mEntities) {
             entity->update(dt);
@@ -70,6 +116,12 @@ void Game::render() {
     // Draw the score
     mHud.getScoreText().setString("Score: " + std::to_string(mHud.getScore()));
     mHud.renderScoreText(mWindow);
+
+    // Draw branches
+    mBranch.render(mWindow);
+
+    // Draw the player
+    mPlayer.render(mWindow);
     // // Draw the message
     if (mHud.getPaused()) {
         mHud.renderMessageText(mWindow);

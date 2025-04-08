@@ -11,10 +11,16 @@ class Entity {
    public:
     virtual void update(sf::Time dt) = 0;
     virtual void render(sf::RenderWindow& window) = 0;
-    virtual int rand_int_uniform_dist(int min, int max) = 0;
     virtual ~Entity() = default;
 
-   protected:
+    int rand_int_uniform_dist(int min, int max) {
+        // Create a uniform distribution between min and max
+        std::uniform_int_distribution<int> dist(min, max);
+        // Generate a random number using the distribution
+        return dist(gen);
+    }
+
+   private:
     // Random number generator
     // This will be used to generate random numbers for the entities
     std::random_device rd;

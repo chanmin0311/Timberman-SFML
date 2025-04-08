@@ -10,7 +10,6 @@ class Bee : public Entity {
     Bee();
     void update(sf::Time dt) override;
     void render(sf::RenderWindow& window) override;
-    int rand_int_uniform_dist(int min, int max) override;
 
     private:
     sf::Texture mTexture;

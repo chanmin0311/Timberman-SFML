@@ -4,7 +4,11 @@
 #include <random>
 
 Cloud::Cloud(float baseY) : mActive(false), mSpeed(0.0f), mBaseY(baseY) {
-    mTexture.loadFromFile("../assets/images/cloud.png");
+    // Cloud path to read and load the cloud texture
+    std::string cloudPath = "../assets/images/cloud.png";
+    if (!mTexture.loadFromFile(cloudPath)) {
+        throw std::runtime_error("Failed to load cloud texture");
+    }
     mSprite.setTexture(mTexture);
     mSprite.setPosition(-200, baseY);
 }
@@ -31,10 +35,4 @@ void Cloud::update(sf::Time dt) {
 
 void Cloud::render(sf::RenderWindow& window) {
     if (mActive) window.draw(mSprite);
-}
-
-int Cloud::rand_int_uniform_dist(int min, int max) {
-    // Define uniform distributions
-    std::uniform_int_distribution<int> dist(min, max);
-    return dist(gen);
 }

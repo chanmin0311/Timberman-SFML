@@ -3,7 +3,8 @@
 
 Hud::Hud() : mScore(0), mPaused(true) {
     // Font path to read and load the font
-    if (!mFont.loadFromFile("../assets/fonts/KOMIKAP_.ttf")) {
+    std::string fontPath = "../assets/fonts/KOMIKAP_.ttf";
+    if (!mFont.loadFromFile(fontPath)) {
         throw std::runtime_error("Failed to load font");
     }
 
@@ -67,8 +68,8 @@ void Hud::updateTimeBar(sf::Time dt) {
         mPaused = true;
         mMessageText.setString("Out of Time!!");
         sf::FloatRect textRect = mMessageText.getLocalBounds();
-        mMessageText.setOrigin(textRect.left + textRect.width / 2.0f, 
-        textRect.top + textRect.height / 2.0f);
+        mMessageText.setOrigin(textRect.left + textRect.width / 2.0f,
+                               textRect.top + textRect.height / 2.0f);
         mMessageText.setPosition(1920 / 2.0f, 1080 / 2.0f);
     }
 }

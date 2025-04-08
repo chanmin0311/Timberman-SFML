@@ -3,7 +3,11 @@
 #include <random>
 
 Bee::Bee() : mActive(false), mSpeed(0.0f) {
-    mTexture.loadFromFile("../assets/images/bee.png");
+    // Bee path to read and load the bee texture
+    std::string beePath = "../assets/images/bee.png";
+    if (!mTexture.loadFromFile(beePath)) {
+        throw std::runtime_error("Failed to load bee texture");
+    }
     mSprite.setTexture(mTexture);
     mSprite.setPosition(1980, 800);
 }
@@ -32,10 +36,4 @@ void Bee::update(sf::Time dt) {
 
 void Bee::render(sf::RenderWindow& window) {
     if (mActive) window.draw(mSprite);
-}
-
-int Bee::rand_int_uniform_dist(int min, int max) {
-    // Define unifrom distributions
-    std::uniform_int_distribution<int> dist(min, max);
-    return dist(gen);
 }
