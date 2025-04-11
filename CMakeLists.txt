@@ -26,7 +26,7 @@ find_package(SFML 2.5 COMPONENTS system window graphics REQUIRED)
 add_executable(${PROJECT_NAME} ${SOURCES})
 
 # Link SFML libraires
-target_link_libraries(${PROJECT_NAME} sfml-system sfml-window sfml-graphics)
+target_link_libraries(${PROJECT_NAME} sfml-system sfml-window sfml-graphics sfml-audio)
 
 # Set output directry for the built executable (bin folder)
 set_target_properties(${PROJECT_NAME} PROPERTIES

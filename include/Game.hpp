@@ -40,7 +40,14 @@ class Game {
     // Tree texture and sprite
     sf::Texture mTextureTree;
     sf::Sprite mSpriteTree;
+    sf::Sprite mSpriteTree1;
+    sf::Sprite mSpriteTree2;
 
+    // Log texture and sprite
+    sf::Texture mLogTexture;
+    sf::Sprite mLogSprite1;
+    sf::Sprite mLogSprite2;
+    
     // Clock to measure time
     // This clock will be used to measure the time between frames
     sf::Clock mClock;

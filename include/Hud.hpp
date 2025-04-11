@@ -3,6 +3,7 @@
 #ifndef HUD_HPP
 #define HUD_HPP
 
+#include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 
 class Hud {
@@ -16,6 +17,8 @@ class Hud {
     int getScore();
     float getTimeRemaining();
     bool getPaused();
+    sf::RectangleShape getTimeBar();
+    sf::Sound& getTimeOut();
 
     // Setters
     void setMessageText(const std::string& msg);
@@ -31,6 +34,10 @@ class Hud {
 
     // Update function
     void updateTimeBar(sf::Time dt);
+
+    // Constants for the time bar
+    const float TIMEBAR_WIDTH = 400;
+    const float TIMEBAR_HEIGHT = 80;
 
    private:
     // Font object
@@ -48,6 +55,10 @@ class Hud {
     float mTimeBarWidthPerSecond;
 
     bool mPaused;
+
+    // Sounds
+    sf::SoundBuffer mTimeOutBuffer;
+    sf::Sound mSdTimeOut;
 };
 
 #endif  // HUD_HPP

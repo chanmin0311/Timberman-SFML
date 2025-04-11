@@ -4,6 +4,7 @@
 #define PLAYER_HPP
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include "../include/Hud.hpp"
 #include "../include/Branch.hpp"
 
@@ -11,11 +12,6 @@
 const float PLAYER_RIGHT = 1200;
 const float PLAYER_LEFT = 580;
 const float PLAYERR_POSITION_Y = 720;
-
-// Enum for the player side
-namespace playerPosition {
-enum class side { LEFT, RIGHT };
-}
 
 class Player {
    private:
@@ -57,15 +53,21 @@ class Player {
     // Player texture and sprite
     sf::Texture mPlayerTexture;
     sf::Sprite mPlayerSprite;
-    playerPosition::side mPlayerSide;
+    side mPlayerSide;
 
     // Player's status
     bool mIsPlayerAlive;
     bool mAcceptInput;
 
+    // sounds
+    sf::SoundBuffer mChopBuffer;
+    sf::Sound mSdChop;
+    sf::SoundBuffer mDeathBuffer;
+    sf::Sound mSdDeath;
+
    public:
     Player();
-    void update(Hud& hud, Branch& branch);
+    void update(Hud& hud, Branch& branch, side prevSide);
     void updateLog(sf::Time dt);
     void render(sf::RenderWindow& window);
 
@@ -77,12 +79,14 @@ class Player {
     sf::Sprite& getPlayerSprite();
     bool isPlayerAlive() const;
     bool isAcceptInput() const;
-    playerPosition::side getPlayerSide() const;
+    side getPlayerSide() const;
+    sf::Sound& getChop();
+    sf::Sound& getDeath();
 
     // Setters
     void setPlayerAlive(bool isAlive);
     void setAcceptInput(bool acceptInput);
-    void setPlayerSide(playerPosition::side side);
+    void setPlayerSide(side side);
 };
 
 #endif

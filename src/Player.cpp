@@ -1,14 +1,15 @@
 // Player.cpp
 #include "../include/Player.hpp"
 
-Player::Player()
-    : mPlayerSide(playerPosition::side::LEFT), mIsPlayerAlive(true), mAcceptInput(false) {
+#include <iostream>
+
+Player::Player() : mPlayerSide(side::RIGHT), mIsPlayerAlive(true), mAcceptInput(false) {
     // Axe file to read and load it
     if (!mAxe.mAxeTexture.loadFromFile("../assets/images/axe.png")) {
         throw std::runtime_error("Failed to load axe texture");
     }
     mAxe.mAxeSprite.setTexture(mAxe.mAxeTexture);
-    mAxe.mAxeSprite.setPosition(mAxe.AXE_POSITION_LEFT, 820);
+    mAxe.mAxeSprite.setPosition(mAxe.AXE_POSITION_RIGHT, 820);
 
     // Log file to read and load it
     if (!mLog.mLogTexture.loadFromFile("../assets/images/log.png")) {
@@ -30,41 +31,80 @@ Player::Player()
     }
 
     mPlayerSprite.setTexture(mPlayerTexture);
-    mPlayerSprite.setPosition(PLAYER_LEFT, PLAYERR_POSITION_Y);
+    mPlayerSprite.setPosition(PLAYER_RIGHT, PLAYERR_POSITION_Y);
+
+    // Set sounds
+    if (!mChopBuffer.loadFromFile("../assets/sounds/chop.wav")) {
+        throw std::runtime_error("Failed to load chop audio");
+    }
+    mSdChop.setBuffer(mChopBuffer);
+
+    if (!mDeathBuffer.loadFromFile("../assets/sounds/death.wav")) {
+        throw std::runtime_error("Failed to load chop audio");
+    }
+    mSdDeath.setBuffer(mDeathBuffer);
 }
 
-void Player::update(Hud& hud, Branch& branch) {
-    auto playerSide = getPlayerSide();
+void Player::update(Hud& hud, Branch& branch, side prevSide) {
+    auto currSide = getPlayerSide();
 
-    if (playerSide == playerPosition::side::RIGHT) {
+    if (currSide == side::RIGHT) {
+        // Increase the score
         hud.setScore(hud.getScore() + 1);
-        // Add to the amout of time remaining
+
+        if (prevSide != currSide) {
+            // Scaling our player
+            mPlayerSprite.setScale(1.0f, 1.0f);
+            mPlayerSprite.setOrigin(0, 0);
+        }
+
         hud.setTimeRemaining(hud.getTimeRemaining() + (2 / hud.getScore()) + .15f);
+
+        // Move out axe and player to the left side
         mAxe.mAxeSprite.setPosition(mAxe.AXE_POSITION_RIGHT, mAxe.mAxeSprite.getPosition().y);
         mPlayerSprite.setPosition(PLAYER_RIGHT, PLAYERR_POSITION_Y);
+
         // Update the braches
-        branch.updateBranches(hud.getScore());
+        branch.updateBranches();
 
         // Set the log flying to the left
         mLog.mLogSprite.setPosition(810, 720);
         mLog.logSpeedX = -5000;
         mLog.logActive = true;
         mAcceptInput = false;
+
+        // Play the sound effect
+        mSdChop.play();
     }
 
-    if (playerSide == playerPosition::side::LEFT) {
+    if (currSide == side::LEFT) {
+        // Increase the score
         hud.setScore(hud.getScore() + 1);
+
+        if (prevSide != currSide) {
+            // Scaling our player
+            mPlayerSprite.setScale(-1.0f, 1.0f);
+            mPlayerSprite.setOrigin(mPlayerSprite.getLocalBounds().width, 0);
+        }
+
         // Add to the amout of time remaining
         hud.setTimeRemaining(hud.getTimeRemaining() + (2 / hud.getScore()) + .15f);
+
+        // Move out axe and player to the left side
         mAxe.mAxeSprite.setPosition(mAxe.AXE_POSITION_LEFT, mAxe.mAxeSprite.getPosition().y);
         mPlayerSprite.setPosition(PLAYER_LEFT, PLAYERR_POSITION_Y);
+
         // Update the braches
-        branch.updateBranches(hud.getScore());
+        branch.updateBranches();
+
         // Set the log flying to the right
         mLog.mLogSprite.setPosition(810, 720);
         mLog.logSpeedX = 5000;
         mLog.logActive = true;
         mAcceptInput = false;
+
+        // Play the sound effect
+        mSdChop.play();
     }
 }
 
@@ -75,7 +115,7 @@ void Player::updateLog(sf::Time dt) {
     // Has the log reached the right  hand edge?
     if (logSprite.getPosition().x < -100 || logSprite.getPosition().x > 2000) {
         mLog.logActive = false;
-        logSprite.setPosition(810, 720);
+        logSprite.setPosition(810, 780);
     }
 }
 
@@ -98,8 +138,10 @@ bool Player::isLogActive() const { return mLog.logActive; }
 sf::Sprite& Player::getRipSprite() { return mRip.mRipSprite; }
 bool Player::isPlayerAlive() const { return mIsPlayerAlive; }
 bool Player::isAcceptInput() const { return mAcceptInput; }
-playerPosition::side Player::getPlayerSide() const { return mPlayerSide; }
+side Player::getPlayerSide() const { return mPlayerSide; }
+sf::Sound& Player::getChop() { return mSdChop; }
+sf::Sound& Player::getDeath() { return mSdDeath; }
 
 void Player::setPlayerAlive(bool isAlive) { mIsPlayerAlive = isAlive; }
 void Player::setAcceptInput(bool acceptInput) { mAcceptInput = acceptInput; }
-void Player::setPlayerSide(playerPosition::side side) { mPlayerSide = side; }
+void Player::setPlayerSide(side side) { mPlayerSide = side; }
