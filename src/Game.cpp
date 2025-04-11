@@ -95,6 +95,7 @@ void Game::processInput() {
         mPlayer.getRipSprite().setPosition(675, 2000);
         mPlayer.getPlayerSprite().setPosition(PLAYER_RIGHT, PLAYERR_POSITION_Y);
         mPlayer.setAcceptInput(true);
+        mPlayer.setPlayerAlive(true);
     }
     if (mPlayer.isAcceptInput()) {
         // Get player's current position
@@ -115,7 +116,7 @@ void Game::update(sf::Time dt) {
     if (mPlayer.isLogActive()) {
         mPlayer.updateLog(dt);
     }
-    if (mBranch.getBranchPosition(5) == mPlayer.getPlayerSide()) {
+    if (mPlayer.isPlayerAlive() && mBranch.getBranchPosition(5) == mPlayer.getPlayerSide()) {
         mPlayer.setPlayerAlive(false);
         mHud.setPaused(true);
         mPlayer.setAcceptInput(false);
@@ -141,6 +142,9 @@ void Game::update(sf::Time dt) {
                                     textRect.top + textRect.height / 2.0f);
 
         mHud.getMessage().setPosition(1920 / 2.0f, 1080 / 2.0f);
+
+        // Play the sound effect
+        mPlayer.getDeath().play();
     }
     if (mHud.getPaused() == false) {
         for (auto& entity : mEntities) {
