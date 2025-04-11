@@ -85,5 +85,5 @@ g++ -o timberman main.cpp -lsfml-graphics -lsfml-window -lsfml-system -lsfml-aud
 4. Run the game:
 
 ```bash
-./Timberman  
+./timberman  
 ```
